@@ -1,14 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
-import 'bootstrap/dist//css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
-import Farmern from './Farmer';
+import Farmer from './Farmer';
+import CreateFarmer from './CreateFarmer';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-      <Route path='/' element ={<farmer/>}>  </Route>
+        <Routes>
+          <Route path='/' element ={<Farmer/>}/> 
+          <Route path='/create' element ={<CreateFarmer/>}/>
+
+        </Routes>
       </BrowserRouter>
     </div>
   );

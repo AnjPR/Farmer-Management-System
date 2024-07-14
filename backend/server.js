@@ -1,15 +1,16 @@
-const express = require('express')
-
-const cors =require ('cors');
-const mysql = require ('mysql');
-
+const express = require('express');
+const cors = require('cors');
+const mysql = require('mysql');
 
 const app = express();
+
+app.use(express.json());
 app.use(cors());
 
 // MySQL connection configuration
 const db = mysql.createConnection({
-    host: 'localhost', // or your MySQL server address
+    host: 'localhost',
+    port: 3306,
     user: 'root',
     password: 'mysql',
     database: 'agriculture'
@@ -23,16 +24,30 @@ db.connect((err) => {
     }
     console.log('Connected to MySQL');
 });
+
 app.get("/", (req, res) => {
-   const sql = "SELECT * FROM farmers";
-   db.query (sql,(err,data)=>{
-        if (err) return app.json ("Error");
+    const sql = "SELECT * FROM farmers";
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json("Error");
+        }
         return res.json(data);
+    });
+});
 
-   })
-})
+app.post('/create', (req, res) => {
+    const sql = "INSERT INTO farmers (FarmerID,FirstName ,LastName,Address,ContactNumber) VALUES(?, ?, ?, ?, ?)";
+    const { FarmerID,FirstName ,LastName,Address,ContactNumber } = req.body;
+    const values = [FarmerID,FirstName ,LastName,Address,ContactNumber];
 
+    db.query(sql, values, (err, data) => {
+        if (err) {
+            return res.json("Error");
+        }
+        return res.json(data);
+    });
+});
 
-app.listen(8081,()=> {
-    console.log("listening");
-})
+app.listen(8081, () => {
+    console.log("Server is listening on port 8081");
+});
